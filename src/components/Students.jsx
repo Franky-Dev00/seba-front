@@ -1,3 +1,4 @@
+import "../styles/students.css";
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 
@@ -10,9 +11,11 @@ function Students() {
     email: ""
   });
   const [showPopup, setShowPopup] = useState(false);
+  const [editPopup, setEditPopup] = useState(false);
+  const [editStudent, setEditStudent] = useState({ id: null, name: "", email: "" });
 
   useEffect(() => {
-    axios.get("http://127.0.0.1:8084/students")
+    axios.get("http://44.199.207.193:8084/students")
       .then(res => {
         setStudents(res.data);
         setLoading(false);
@@ -28,9 +31,14 @@ function Students() {
     setNewStudent({ ...newStudent, [name]: value });
   };
 
+  const handleEditChange = (e) => {
+    const { name, value } = e.target;
+    setEditStudent({ ...editStudent, [name]: value });
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
-    axios.post("http://127.0.0.1:8084/students", newStudent)
+    axios.post("http://44.199.207.193:8084/students", newStudent)
       .then(res => {
         setStudents([...students, res.data]);
         setNewStudent({ name: "", email: "" });
@@ -39,9 +47,19 @@ function Students() {
       .catch(err => setError("Error al agregar estudiante: " + err.message));
   };
 
+  const handleEditSubmit = (e) => {
+    e.preventDefault();
+    axios.put(`http://44.199.207.193:8084/students/${editStudent.id}`, editStudent)
+      .then(res => {
+        setStudents(students.map(s => s.id === editStudent.id ? res.data : s));
+        setEditPopup(false);
+      })
+      .catch(err => setError("Error al editar estudiante: " + err.message));
+  };
+
   const handleDelete = (id) => {
     if (window.confirm("¿Seguro de eliminar este estudiante?")) {
-      axios.delete(`http://127.0.0.1:8084/students/${id}`)
+      axios.delete(`http://44.199.207.193:8084/students/${id}`)
         .then(() => {
           setStudents(students.filter(s => s.id !== id));
         })
@@ -49,61 +67,122 @@ function Students() {
     }
   };
 
+  const openEditPopup = (student) => {
+    setEditStudent(student);
+    setEditPopup(true);
+  };
+
   if (loading) return <p>Cargando estudiantes...</p>;
   if (error) return <p>{error}</p>;
 
   return (
-    <div>
-      <h2>Estudiantes</h2>
-      <button onClick={() => setShowPopup(true)}>+ Agregar Estudiante</button>
+    <div className="students-index">
+      <h2 className="section-title">🎓 Estudiantes</h2>
+      <div className="index-actions">
+        <button className="add-student-btn" onClick={() => setShowPopup(true)}>+ Agregar Estudiante</button>
+      </div>
 
       {showPopup && (
         <div className="popup">
-          <form onSubmit={handleSubmit}>
-            <input
-              type="text"
-              name="name"
-              value={newStudent.name}
-              onChange={handleChange}
-              placeholder="Nombre"
-              required
-            />
-            <input
-              type="email"
-              name="email"
-              value={newStudent.email}
-              onChange={handleChange}
-              placeholder="Email"
-              required
-            />
-            <button type="submit">Guardar</button>
-            <button type="button" onClick={() => setShowPopup(false)}>Cancelar</button>
-          </form>
+          <div className="popup-content">
+            <h3>Agregar Estudiante</h3>
+            <form className="popup-form" onSubmit={handleSubmit}>
+              <div className="form-group">
+                <label htmlFor="name">Nombre</label>
+                <input
+                  type="text"
+                  id="name"
+                  name="name"
+                  value={newStudent.name}
+                  onChange={handleChange}
+                  placeholder="Nombre completo"
+                  required
+                />
+              </div>
+              <div className="form-group">
+                <label htmlFor="email">Email</label>
+                <input
+                  type="email"
+                  id="email"
+                  name="email"
+                  value={newStudent.email}
+                  onChange={handleChange}
+                  placeholder="Correo electrónico"
+                  required
+                />
+              </div>
+              <div className="form-actions">
+                <button type="submit" className="add-student-btn">Guardar</button>
+                <button type="button" className="cancel-btn" onClick={() => setShowPopup(false)}>Cancelar</button>
+              </div>
+            </form>
+          </div>
         </div>
       )}
 
-      <table>
-        <thead>
-          <tr>
-            <th>ID</th>
-            <th>Nombre</th>
-            <th>Email</th>
-            <th>Acciones</th>
-          </tr>
-        </thead>
-        <tbody>
-          {students.map(s => (
-            <tr key={s.id}>
-              <td>{s.id}</td>
-              <td>{s.name}</td>
-              <td>{s.email}</td>
-              <td>
-                <button className="action" onClick={() => handleDelete(s.id)}>🗑️</button>
-              </td>
+      {editPopup && (
+        <div className="popup">
+          <div className="popup-content">
+            <h3>Editar Estudiante</h3>
+            <form className="popup-form" onSubmit={handleEditSubmit}>
+              <div className="form-group">
+                <label htmlFor="edit-name">Nombre</label>
+                <input
+                  type="text"
+                  id="edit-name"
+                  name="name"
+                  value={editStudent.name}
+                  onChange={handleEditChange}
+                  placeholder="Nombre completo"
+                  required
+                />
+              </div>
+              <div className="form-group">
+                <label htmlFor="edit-email">Email</label>
+                <input
+                  type="email"
+                  id="edit-email"
+                  name="email"
+                  value={editStudent.email}
+                  onChange={handleEditChange}
+                  placeholder="Correo electrónico"
+                  required
+                />
+              </div>
+              <div className="form-actions">
+                <button type="submit" className="add-student-btn">Guardar</button>
+                <button type="button" className="cancel-btn" onClick={() => setEditPopup(false)}>Cancelar</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
+      <div className="table-container">
+        <table className="styled-table">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Nombre</th>
+              <th>Email</th>
+              <th>Acciones</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {students.map(s => (
+              <tr key={s.id}>
+                <td>{s.id}</td>
+                <td>{s.name}</td>
+                <td>{s.email}</td>
+                <td>
+                  <button className="action edit-btn" title="Editar" onClick={() => openEditPopup(s)}>✏️</button>
+                  <button className="action delete-btn" title="Eliminar" onClick={() => handleDelete(s.id)}>🗑️</button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 }

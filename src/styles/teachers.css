@@ -1,0 +1,110 @@
+/* Estilos para el componente Teachers */
+.teachers-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 18px;
+}
+
+.teacher-card {
+  background: #fef9c3;
+  border-radius: 8px;
+  padding: 18px;
+  box-shadow: 0 1px 4px rgba(202,138,4,0.08);
+}
+
+.teacher-card h3 {
+  margin: 0 0 8px 0;
+  color: #ca8a04;
+}
+
+.teacher-card p {
+  margin: 0;
+  color: #374151;
+}
+
+.add-teacher-btn {
+  background: #f59e42;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  padding: 8px 16px;
+  cursor: pointer;
+  margin-bottom: 16px;
+}
+.add-teacher-btn:hover {
+  background: #d97706;
+}
+
+/* Estilos para el index de profesores */
+.teachers-index {
+  max-width: 900px;
+  margin: 0 auto;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 2px 16px rgba(202,138,4,0.07);
+  padding: 32px 24px;
+}
+.section-title {
+  font-size: 2rem;
+  color: #ca8a04;
+  margin-bottom: 24px;
+  text-align: left;
+  font-weight: 700;
+  letter-spacing: 1px;
+}
+.index-actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 18px;
+}
+.table-container {
+  overflow-x: auto;
+}
+.styled-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: #fef9c3;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 1px 4px rgba(202,138,4,0.08);
+}
+.styled-table th, .styled-table td {
+  padding: 14px 12px;
+  text-align: left;
+}
+.styled-table th {
+  background: #ca8a04;
+  color: #fff;
+  font-weight: 600;
+  border-bottom: 2px solid #fef9c3;
+}
+.styled-table tr {
+  border-bottom: 1px solid #fef9c3;
+}
+.styled-table tr:last-child {
+  border-bottom: none;
+}
+.styled-table td {
+  color: #374151;
+}
+.action {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 1.2rem;
+  margin-right: 8px;
+  transition: color 0.2s;
+}
+.edit-btn {
+  color: #ca8a04;
+}
+.edit-btn:hover {
+  color: #b45309;
+}
+.delete-btn {
+  color: #ef4444;
+}
+.delete-btn:hover {
+  color: #b91c1c;
+}
+

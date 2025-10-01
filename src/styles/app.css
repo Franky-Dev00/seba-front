@@ -1,0 +1,60 @@
+/* Estilos generales para la app */
+.app-container {
+  font-family: 'Segoe UI', Arial, sans-serif;
+  background: linear-gradient(120deg, #f8fafc 0%, #e0e7ff 100%);
+  min-height: 100vh;
+  padding: 32px;
+}
+
+h1 {
+  color: #3b82f6;
+  text-align: center;
+  margin-bottom: 24px;
+}
+
+.navbar {
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+  margin-bottom: 32px;
+}
+
+.navbar button {
+  background: #3b82f6;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  padding: 10px 20px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.navbar button:hover {
+  background: #2563eb;
+}
+
+.card {
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+  padding: 24px;
+  margin-bottom: 20px;
+}
+
+.popup {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0,0,0,0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.popup-content {
+  background: #fff;
+  padding: 32px;
+  border-radius: 10px;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.15);
+}
