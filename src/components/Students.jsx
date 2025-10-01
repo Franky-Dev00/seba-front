@@ -1,20 +1,20 @@
 import "../styles/students.css";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react"; 
 import axios from "axios";
 
 function Students() {
-  const [students, setStudents] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const [students, setStudents] = useState([]);  //Variable de estado para guardar la lista de estudiantes
+  const [loading, setLoading] = useState(true); // Variable de estado para indicar si los datos están cargando
+  const [error, setError] = useState(null); // Variable de estado para manejar errores
   const [newStudent, setNewStudent] = useState({
     name: "",
     email: ""
-  });
-  const [showPopup, setShowPopup] = useState(false);
-  const [editPopup, setEditPopup] = useState(false);
-  const [editStudent, setEditStudent] = useState({ id: null, name: "", email: "" });
-  const [formError, setFormError] = useState("");
-  const [editFormError, setEditFormError] = useState("");
+  }); // Estado para el nuevo estudiante
+  const [showPopup, setShowPopup] = useState(false); // Estado para mostrar/ocultar el popup de agregar estudiante
+  const [editPopup, setEditPopup] = useState(false); // Estado para mostrar/ocultar el popup de editar estudiante
+  const [editStudent, setEditStudent] = useState({ id: null, name: "", email: "" }); // Estado para el estudiante que se está editando
+  const [formError, setFormError] = useState(""); // Estado para errores en el formulario de agregar
+  const [editFormError, setEditFormError] = useState(""); // Estado para errores en el formulario de editar
 
   useEffect(() => {
     axios.get("http://44.199.207.193:8084/students")
@@ -26,7 +26,7 @@ function Students() {
         setError("Error al cargar estudiantes: " + err.message);
         setLoading(false);
       });
-  }, []);
+  }, []); // El array vacío asegura que esto se ejecute solo una vez al montar el componente
 
   const handleChange = (e) => {
     const { name, value } = e.target;
