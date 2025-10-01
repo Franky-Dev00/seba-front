@@ -105,6 +105,15 @@
 .cancel-btn:hover {
   background: #cbd5e1;
 }
+.form-error {
+  color: #d32f2f;
+  background: #fff3f3;
+  border: 1px solid #d32f2f;
+  padding: 8px;
+  margin-bottom: 10px;
+  border-radius: 4px;
+  font-size: 0.95em;
+}
 
 /* Estilos para el index de inscripciones */
 .enrollments-index {

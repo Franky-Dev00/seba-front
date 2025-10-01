@@ -14,6 +14,8 @@ function Grades() {
   const [showPopup, setShowPopup] = useState(false);
   const [editPopup, setEditPopup] = useState(false);
   const [editGrade, setEditGrade] = useState({ id: null, student_id: "", course_id: "", grade: "" });
+  const [formError, setFormError] = useState("");
+  const [editFormError, setEditFormError] = useState("");
 
   useEffect(() => {
     axios.get("http://44.199.207.193:8084/grades")
@@ -39,6 +41,19 @@ function Grades() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    if (!newGrade.student_id.trim()) {
+      setFormError("El ID del estudiante es obligatorio.");
+      return;
+    }
+    if (!newGrade.course_id.trim()) {
+      setFormError("El ID del curso es obligatorio.");
+      return;
+    }
+    if (!newGrade.grade.trim()) {
+      setFormError("La nota es obligatoria.");
+      return;
+    }
+    setFormError("");
     axios.post("http://44.199.207.193:8084/grades", newGrade)
       .then(res => {
         setGrades([...grades, res.data]);
@@ -50,6 +65,19 @@ function Grades() {
 
   const handleEditSubmit = (e) => {
     e.preventDefault();
+    if (!editGrade.student_id.trim()) {
+      setEditFormError("El ID del estudiante es obligatorio.");
+      return;
+    }
+    if (!editGrade.course_id.trim()) {
+      setEditFormError("El ID del curso es obligatorio.");
+      return;
+    }
+    if (!editGrade.grade.trim()) {
+      setEditFormError("La nota es obligatoria.");
+      return;
+    }
+    setEditFormError("");
     axios.put(`http://44.199.207.193:8084/grades/${editGrade.id}`, editGrade)
       .then(res => {
         setGrades(grades.map(g => g.id === editGrade.id ? res.data : g));
@@ -88,6 +116,7 @@ function Grades() {
           <div className="popup-content">
             <h3>Agregar Nota</h3>
             <form className="popup-form" onSubmit={handleSubmit}>
+              {formError && <div className="form-error">{formError}</div>}
               <div className="form-group">
                 <label htmlFor="student_id">ID Estudiante</label>
                 <input
@@ -138,6 +167,7 @@ function Grades() {
           <div className="popup-content">
             <h3>Editar Nota</h3>
             <form className="popup-form" onSubmit={handleEditSubmit}>
+              {editFormError && <div className="form-error">{editFormError}</div>}
               <div className="form-group">
                 <label htmlFor="edit-student_id">ID Estudiante</label>
                 <input

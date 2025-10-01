@@ -13,6 +13,8 @@ function Teachers() {
   const [showPopup, setShowPopup] = useState(false);
   const [editPopup, setEditPopup] = useState(false);
   const [editTeacher, setEditTeacher] = useState({ id: null, name: "", email: "" });
+  const [formError, setFormError] = useState("");
+  const [editFormError, setEditFormError] = useState("");
 
   useEffect(() => {
     axios.get("http://44.199.207.193:8084/teachers")
@@ -36,8 +38,26 @@ function Teachers() {
     setEditTeacher({ ...editTeacher, [name]: value });
   };
 
+  const validateEmail = (email) => {
+    // Simple email regex
+    return /^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email);
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
+    if (!newTeacher.name.trim()) {
+      setFormError("El nombre es obligatorio.");
+      return;
+    }
+    if (!newTeacher.email.trim()) {
+      setFormError("El email es obligatorio.");
+      return;
+    }
+    if (!validateEmail(newTeacher.email)) {
+      setFormError("El email no tiene un formato válido.");
+      return;
+    }
+    setFormError("");
     axios.post("http://44.199.207.193:8084/teachers", newTeacher)
       .then(res => {
         setTeachers([...teachers, res.data]);
@@ -49,6 +69,19 @@ function Teachers() {
 
   const handleEditSubmit = (e) => {
     e.preventDefault();
+    if (!editTeacher.name.trim()) {
+      setEditFormError("El nombre es obligatorio.");
+      return;
+    }
+    if (!editTeacher.email.trim()) {
+      setEditFormError("El email es obligatorio.");
+      return;
+    }
+    if (!validateEmail(editTeacher.email)) {
+      setEditFormError("El email no tiene un formato válido.");
+      return;
+    }
+    setEditFormError("");
     axios.put(`http://44.199.207.193:8084/teachers/${editTeacher.id}`, editTeacher)
       .then(res => {
         setTeachers(teachers.map(t => t.id === editTeacher.id ? res.data : t));
@@ -87,6 +120,7 @@ function Teachers() {
           <div className="popup-content">
             <h3>Agregar Profesor</h3>
             <form className="popup-form" onSubmit={handleSubmit}>
+              {formError && <div className="form-error">{formError}</div>}
               <div className="form-group">
                 <label htmlFor="name">Nombre</label>
                 <input
@@ -125,6 +159,7 @@ function Teachers() {
           <div className="popup-content">
             <h3>Editar Profesor</h3>
             <form className="popup-form" onSubmit={handleEditSubmit}>
+              {editFormError && <div className="form-error">{editFormError}</div>}
               <div className="form-group">
                 <label htmlFor="edit-name">Nombre</label>
                 <input

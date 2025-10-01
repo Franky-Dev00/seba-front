@@ -108,3 +108,15 @@
   color: #b91c1c;
 }
 
+/* Estilos para mensajes de error en formularios */
+.form-error {
+  background: #fee2e2;
+  color: #b91c1c;
+  border-radius: 6px;
+  padding: 8px 12px;
+  margin-bottom: 12px;
+  font-size: 0.98rem;
+  font-weight: 500;
+  border: 1px solid #fecaca;
+}
+

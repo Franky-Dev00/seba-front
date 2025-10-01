@@ -13,6 +13,8 @@ function Enrollments() {
   const [showPopup, setShowPopup] = useState(false);
   const [editPopup, setEditPopup] = useState(false);
   const [editEnrollment, setEditEnrollment] = useState({ id: null, student_id: "", course_id: "" });
+  const [formError, setFormError] = useState("");
+  const [editFormError, setEditFormError] = useState("");
 
   useEffect(() => {
     axios.get("http://44.199.207.193:8084/enrollments")
@@ -38,6 +40,15 @@ function Enrollments() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    if (!newEnrollment.student_id.trim()) {
+      setFormError("El ID del estudiante es obligatorio.");
+      return;
+    }
+    if (!newEnrollment.course_id.trim()) {
+      setFormError("El ID del curso es obligatorio.");
+      return;
+    }
+    setFormError("");
     axios.post("http://44.199.207.193:8084/enrollments", newEnrollment)
       .then(res => {
         setEnrollments([...enrollments, res.data]);
@@ -49,6 +60,15 @@ function Enrollments() {
 
   const handleEditSubmit = (e) => {
     e.preventDefault();
+    if (!editEnrollment.student_id.trim()) {
+      setEditFormError("El ID del estudiante es obligatorio.");
+      return;
+    }
+    if (!editEnrollment.course_id.trim()) {
+      setEditFormError("El ID del curso es obligatorio.");
+      return;
+    }
+    setEditFormError("");
     axios.put(`http://44.199.207.193:8084/enrollments/${editEnrollment.id}`, editEnrollment)
       .then(res => {
         setEnrollments(enrollments.map(enr => enr.id === editEnrollment.id ? res.data : enr));
@@ -87,6 +107,7 @@ function Enrollments() {
           <div className="popup-content">
             <h3>Agregar Inscripción</h3>
             <form className="popup-form" onSubmit={handleSubmit}>
+              {formError && <div className="form-error">{formError}</div>}
               <div className="form-group">
                 <label htmlFor="student_id">ID Estudiante</label>
                 <input
@@ -125,6 +146,7 @@ function Enrollments() {
           <div className="popup-content">
             <h3>Editar Inscripción</h3>
             <form className="popup-form" onSubmit={handleEditSubmit}>
+              {editFormError && <div className="form-error">{editFormError}</div>}
               <div className="form-group">
                 <label htmlFor="edit-student_id">ID Estudiante</label>
                 <input

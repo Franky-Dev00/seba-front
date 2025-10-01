@@ -13,6 +13,8 @@ function Courses() {
   const [showPopup, setShowPopup] = useState(false);
   const [editPopup, setEditPopup] = useState(false);
   const [editCourse, setEditCourse] = useState({ id: null, title: "", teacher_id: "" });
+  const [formError, setFormError] = useState("");
+  const [editFormError, setEditFormError] = useState("");
 
   useEffect(() => {
     axios.get("http://44.199.207.193:8084/courses")
@@ -38,6 +40,15 @@ function Courses() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    if (!newCourse.title.trim()) {
+      setFormError("El título es obligatorio.");
+      return;
+    }
+    if (!newCourse.teacher_id.trim()) {
+      setFormError("El ID del profesor es obligatorio.");
+      return;
+    }
+    setFormError("");
     axios.post("http://44.199.207.193:8084/courses", newCourse)
       .then(res => {
         setCourses([...courses, res.data]);
@@ -49,6 +60,15 @@ function Courses() {
 
   const handleEditSubmit = (e) => {
     e.preventDefault();
+    if (!editCourse.title.trim()) {
+      setEditFormError("El título es obligatorio.");
+      return;
+    }
+    if (!editCourse.teacher_id.trim()) {
+      setEditFormError("El ID del profesor es obligatorio.");
+      return;
+    }
+    setEditFormError("");
     axios.put(`http://44.199.207.193:8084/courses/${editCourse.id}`, editCourse)
       .then(res => {
         setCourses(courses.map(c => c.id === editCourse.id ? res.data : c));
@@ -87,6 +107,7 @@ function Courses() {
           <div className="popup-content">
             <h3>Agregar Curso</h3>
             <form className="popup-form" onSubmit={handleSubmit}>
+              {formError && <div className="form-error">{formError}</div>}
               <div className="form-group">
                 <label htmlFor="title">Título</label>
                 <input
@@ -125,6 +146,7 @@ function Courses() {
           <div className="popup-content">
             <h3>Editar Curso</h3>
             <form className="popup-form" onSubmit={handleEditSubmit}>
+              {editFormError && <div className="form-error">{editFormError}</div>}
               <div className="form-group">
                 <label htmlFor="edit-title">Título</label>
                 <input
